@@ -1,4 +1,6 @@
 .idea/*
-./test.py
+test.py
 build/*
 /OPCReader/__pycache__/*
+OPCReader.egg-info/*
+Doc/.ipynb_checkpoints/*

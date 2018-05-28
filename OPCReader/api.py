@@ -14,6 +14,7 @@ def parse(filename):
 def _read_meta(filename):
     """Read the first 6 rows of the datafile, this contains the system information"""
     data = pd.read_csv(filename,header=None, nrows=6, sep=",|:", engine="python", index_col=0).T
+    data.reset_index(inplace=True)
     return data
 
 
@@ -26,11 +27,12 @@ def _read_bin_settings(filename):
 def _read_data(filename):
     """Read the data contained in the CSV"""
     data = pd.read_csv(filename, header=18)
-    data['OADateTime'] = data['OADateTime'].apply(_ole_to_epoch)
+    data['OADateTime'] = data['OADateTime'].apply(_ole_to_datetime)
+    data['time'] = data['OADateTime'] - data['OADateTime'][0]
     return data
 
 
-def _ole_to_epoch(x):
+def _ole_to_datetime(x):
     """Convert OAtime to datetime"""
     OLE_TIME_ZERO = datetime.datetime(1899, 12, 30, 0, 0, 0)
     time = OLE_TIME_ZERO + datetime.timedelta(days=float(x))
